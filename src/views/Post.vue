@@ -55,7 +55,7 @@ export default {
 
   validations: {
     author: { required, maxLength: maxLength(50) },
-    text: { required, maxLength: maxLength(50) }
+    text: { required, maxLength: maxLength(5000) }
   },
   computed: {
     ...mapGetters({ posts: "loadedPosts" }),
@@ -76,7 +76,7 @@ export default {
       const errors = [];
       if (!this.$v.text.$dirty) return errors;
       !this.$v.text.maxLength &&
-        errors.push("Text must be be not less 50 characters long");
+        errors.push("Text must be be not less 5000 characters long");
       !this.$v.text.required && errors.push("Text is required.");
       return errors;
     }

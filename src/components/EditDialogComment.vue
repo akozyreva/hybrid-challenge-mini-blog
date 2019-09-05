@@ -16,7 +16,7 @@
             @blur="$v.name.$touch()"
           ></v-text-field>
           <v-textarea
-            v-model="loadedPost.text"
+            v-model="text"
             :error-messages="textErrors"
             required
             @input="$v.text.$touch()"
@@ -40,18 +40,18 @@ import { required, maxLength } from "vuelidate/lib/validators";
 import InfoDialog from "@/components/InfoDialog";
 export default {
   mixins: [validationMixin],
-  props: ["loadedPost"],
+  props: ["loadedComment"],
   components: {
     InfoDialog
   },
   validations: {
-    name: { required, maxLength: maxLength(10) },
-    text: { required, maxLength: maxLength(10) }
+    name: { required, maxLength: maxLength(50) },
+    text: { required, maxLength: maxLength(5000) }
   },
   data() {
     return {
-      name: this.loadedPost.name,
-      text: this.loadedPost.text,
+      name: this.loadedComment.author,
+      text: this.loadedComment.text,
       editDialog: false,
       dialog: false
     };
@@ -69,7 +69,7 @@ export default {
       const errors = [];
       if (!this.$v.text.$dirty) return errors;
       !this.$v.text.maxLength &&
-        errors.push("Text must be not less 50 characters long");
+        errors.push("Text must be not less 5000 characters long");
       !this.$v.text.required && errors.push("Text is required.");
       return errors;
     }
@@ -82,15 +82,15 @@ export default {
       this.dialog = false;
     },
     onEditComment() {
-      const post = {
-        id: this.$route.params.id.slice(1),
-        name: this.name,
-        text: this.text,
-        comments: this.loadedPost.comments
+      const comment = {
+        id: this.loadedComment.id,
+        author: this.name,
+        text: this.text
       };
-      this.$store.dispatch("updatePost", post);
-      this.cancel();
+      const payload = { comment, postId: this.$route.params.id.slice(1) };
+      this.$store.dispatch("editComment", payload);
       this.dialog = true;
+      this.editDialog = false;
     },
     onClickChild(val) {
       this.dialog = val;

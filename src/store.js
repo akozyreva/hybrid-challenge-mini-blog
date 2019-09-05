@@ -58,6 +58,19 @@ export default new Vuex.Store({
       retrievedPosts[postIndex].comments.push(payload.comment);
       vuexContext.dispatch("updatePost", retrievedPosts[postIndex]);
     },
+    editComment(vuexContext, payload) {
+      let retrievedPosts = JSON.parse(localStorage.getItem("posts"));
+      const postIndex = retrievedPosts.findIndex(
+        el => el.id === payload.postId
+      );
+      const commentIndex = retrievedPosts[postIndex].comments.findIndex(
+        el => el.id === payload.comment.id
+      );
+      retrievedPosts[postIndex].comments[commentIndex] = payload.comment;
+      console.log(retrievedPosts[postIndex].comments[commentIndex]);
+      vuexContext.dispatch("updatePost", retrievedPosts[postIndex]);
+    },
+
     delCommentfromPost(vuexContext, payload) {
       let retrievedPosts = JSON.parse(localStorage.getItem("posts"));
       const postIndex = retrievedPosts.findIndex(

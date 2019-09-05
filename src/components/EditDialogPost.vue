@@ -16,7 +16,7 @@
             @blur="$v.name.$touch()"
           ></v-text-field>
           <v-textarea
-            v-model="loadedPost.text"
+            v-model="text"
             :error-messages="textErrors"
             required
             @input="$v.text.$touch()"
@@ -45,8 +45,8 @@ export default {
     InfoDialog
   },
   validations: {
-    name: { required, maxLength: maxLength(10) },
-    text: { required, maxLength: maxLength(10) }
+    name: { required, maxLength: maxLength(50) },
+    text: { required, maxLength: maxLength(5000) }
   },
   data() {
     return {
@@ -69,7 +69,7 @@ export default {
       const errors = [];
       if (!this.$v.text.$dirty) return errors;
       !this.$v.text.maxLength &&
-        errors.push("Text must be not less 50 characters long");
+        errors.push("Text must be not less 5000 characters long");
       !this.$v.text.required && errors.push("Text is required.");
       return errors;
     }

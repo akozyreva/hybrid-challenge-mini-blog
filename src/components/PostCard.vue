@@ -19,7 +19,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-card-actions>
-          <v-btn>Edit</v-btn>
+          <EditDialogComment :loadedComment="comment"></EditDialogComment>
           <v-spacer></v-spacer>
           <v-btn @click="onDeleteComment(comment.id)">Delete</v-btn>
         </v-card-actions>
