@@ -5,7 +5,7 @@
         <v-btn v-on="on">Edit</v-btn>
       </template>
       <v-card>
-        <form @submit.prevent="onEditPost">
+        <form @submit.prevent="onEditComment">
           <v-text-field
             v-model="name"
             :error-messages="nameErrors"
@@ -81,8 +81,7 @@ export default {
       this.editDialog = false;
       this.dialog = false;
     },
-    onEditPost() {
-      console.log("method for edit");
+    onEditComment() {
       const post = {
         id: this.$route.params.id.slice(1),
         name: this.name,

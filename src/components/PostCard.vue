@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card class="mx-auto" tile>
-      <v-subheader>Info about Post</v-subheader>
+      <h2>Info about Post</h2>
       <v-list-item two-line>
         <v-list-item-content>
           <v-list-item-title>{{ loadedPost.name }}</v-list-item-title>
@@ -10,7 +10,7 @@
       </v-list-item>
     </v-card>
     <v-card class="mx-auto" tile v-show="loadedPost.comments">
-      <v-subheader>Comments</v-subheader>
+      <h2>Comments</h2>
       <div two-line v-for="(comment, i) in loadedPost.comments" :key="i">
         <v-list-item>
           <v-list-item-content>
@@ -29,8 +29,12 @@
 </template>
 
 <script>
+import EditDialogComment from "@/components/EditDialogComment";
 export default {
   props: ["loadedPost"],
+  components: {
+    EditDialogComment
+  },
   methods: {
     onDeleteComment(commentId) {
       const payload = { commentId, postId: this.$route.params.id.slice(1) };

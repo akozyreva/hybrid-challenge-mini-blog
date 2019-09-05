@@ -2,15 +2,13 @@
   <v-container>
     <v-layout row justify-center>
       <v-flex xs6 class="text-xs-center">
-        <v-btn dark @click.stop="dialog = true">
-          Edit
-        </v-btn>
         <EditDialogPost
           :loadedPost="singlePost"
-          :dialog.sync="dialog"
           @clicked="onClickChild"
         ></EditDialogPost>
+        <v-btn @click="deletePost">Delete</v-btn>
         <PostCard :loadedPost="singlePost"></PostCard>
+        <h2>Add new Comment</h2>
         <form @submit.prevent="onCreateComment">
           <v-text-field
             v-model="author"
@@ -47,8 +45,7 @@ import { required, maxLength } from "vuelidate/lib/validators";
 export default {
   data: () => ({
     author: "",
-    text: "",
-    dialog: false
+    text: ""
   }),
   components: {
     PostCard,
@@ -97,6 +94,10 @@ export default {
     },
     onClickChild(val) {
       this.dialog = val;
+    },
+    deletePost() {
+      this.$store.dispatch("deletePost", this.$route.params.id.slice(1));
+      this.$router.push({ path: "/" });
     }
   }
 };

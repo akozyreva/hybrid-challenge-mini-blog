@@ -38,6 +38,16 @@ export default new Vuex.Store({
       localStorage.setItem("posts", JSON.stringify(retrievedPosts));
       vuexContext.commit("setPosts", retrievedPosts);
     },
+    deletePost(vuexContext, postId) {
+      let retrievedPosts = JSON.parse(localStorage.getItem("posts"));
+      const postIndex = retrievedPosts.findIndex(el => el.id === postId);
+      console.log(postIndex);
+      retrievedPosts = retrievedPosts
+        .slice(0, postIndex)
+        .concat(retrievedPosts.slice(postIndex + 1, retrievedPosts.length));
+      localStorage.setItem("posts", JSON.stringify(retrievedPosts));
+      vuexContext.commit("setPosts", retrievedPosts);
+    },
     addCommentToPost(vuexContext, payload) {
       let retrievedPosts = JSON.parse(localStorage.getItem("posts"));
       const postIndex = retrievedPosts.findIndex(
