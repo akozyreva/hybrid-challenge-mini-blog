@@ -5,29 +5,48 @@
         <v-btn v-on="on">Edit</v-btn>
       </template>
       <v-card>
-        <form @submit.prevent="onEditComment">
-          <v-text-field
-            v-model="name"
-            :error-messages="nameErrors"
-            :counter="50"
-            label="Name"
-            required
-            @input="$v.name.$touch()"
-            @blur="$v.name.$touch()"
-          ></v-text-field>
-          <v-textarea
-            v-model="text"
-            :error-messages="textErrors"
-            required
-            @input="$v.text.$touch()"
-            @blur="$v.text.$touch()"
-            label="Text of Post"
-          ></v-textarea>
-          <v-btn class="mr-4" :disabled="$v.$invalid" type="submit"
-            >Edit Post</v-btn
+        <v-card-title>
+          <span class="headline">Page Comment Editing</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="name"
+                  :error-messages="nameErrors"
+                  :counter="50"
+                  label="Author"
+                  required
+                  @input="$v.name.$touch()"
+                  @blur="$v.name.$touch()"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="text"
+                  :error-messages="textErrors"
+                  required
+                  @input="$v.text.$touch()"
+                  @blur="$v.text.$touch()"
+                  label="Text of Comment"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn
+            color="blue darken-1"
+            text
+            :disabled="$v.$invalid"
+            type="submit"
+            @click="onEditComment"
+            >Edit</v-btn
           >
-          <v-btn class="mr-4" @click="cancel">Cancel</v-btn>
-        </form>
+          <v-btn color="blue darken-1" @click="cancel" text>Cancel</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
     <InfoDialog :dialog="dialog" @clicked="onClickChild"></InfoDialog>

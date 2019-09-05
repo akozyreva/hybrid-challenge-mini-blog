@@ -80,6 +80,7 @@ export default {
       };
       this.$store.dispatch("createPost", post);
       this.clear();
+      this.$router.push({ path: "/" });
     }
   }
 };

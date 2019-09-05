@@ -6,7 +6,7 @@
           :loadedPost="singlePost"
           @clicked="onClickChild"
         ></EditDialogPost>
-        <v-btn @click="deletePost">Delete</v-btn>
+        <v-btn @click="deletePost">Delete Post</v-btn>
         <PostCard :loadedPost="singlePost"></PostCard>
         <h2>Add new Comment</h2>
         <form @submit.prevent="onCreateComment">
