@@ -2,6 +2,14 @@
   <v-container>
     <v-layout row justify-center>
       <v-flex xs6 class="text-xs-center">
+        <v-btn dark @click.stop="dialog = true">
+          Edit
+        </v-btn>
+        <EditDialogPost
+          :loadedPost="singlePost"
+          :dialog.sync="dialog"
+          @clicked="onClickChild"
+        ></EditDialogPost>
         <PostCard :loadedPost="singlePost"></PostCard>
         <form @submit.prevent="onCreateComment">
           <v-text-field
@@ -21,7 +29,7 @@
             @blur="$v.text.$touch()"
             label="Text of Comment"
           ></v-textarea>
-          <v-btn class="mr-4" :disabled="$v.$invalid" type="submit"
+          <v-btn class="mr-4" type="submit" :disabled="$v.$invalid"
             >Create Comment</v-btn
           >
         </form>
@@ -33,15 +41,18 @@
 <script>
 import { mapGetters } from "vuex";
 import PostCard from "@/components/PostCard";
+import EditDialogPost from "@/components/EditDialogPost";
 import { validationMixin } from "vuelidate";
 import { required, maxLength } from "vuelidate/lib/validators";
 export default {
   data: () => ({
     author: "",
-    text: ""
+    text: "",
+    dialog: false
   }),
   components: {
-    PostCard
+    PostCard,
+    EditDialogPost
   },
   mixins: [validationMixin],
 
@@ -83,6 +94,9 @@ export default {
       };
       const payload = { comment, postId: this.$route.params.id.slice(1) };
       this.$store.dispatch("addCommentToPost", payload);
+    },
+    onClickChild(val) {
+      this.dialog = val;
     }
   }
 };
