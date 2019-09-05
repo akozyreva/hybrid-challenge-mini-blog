@@ -2,7 +2,10 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 Vue.use(Vuex);
-
+const getPosts = () => JSON.parse(localStorage.getItem("posts"));
+const findIndexById = (arr, valId) => arr.findIndex(el => el.id === valId);
+const delRowFromArr = (arr, index) =>
+  arr.slice(0, index).concat(arr.slice(index + 1, arr.length));
 export default new Vuex.Store({
   state: {
     posts: []
@@ -14,11 +17,11 @@ export default new Vuex.Store({
   },
   actions: {
     initStore(vuexContext) {
-      let retrievedPosts = JSON.parse(localStorage.getItem("posts"));
+      let retrievedPosts = getPosts();
       vuexContext.commit("setPosts", retrievedPosts);
     },
     createPost(vuexContext, post) {
-      let retrievedPosts = JSON.parse(localStorage.getItem("posts"));
+      let retrievedPosts = getPosts();
       if (!retrievedPosts) {
         let posts = [];
         posts.push(post);
@@ -31,70 +34,54 @@ export default new Vuex.Store({
       }
     },
     updatePost(vuexContext, post) {
-      console.log(post);
-      let retrievedPosts = JSON.parse(localStorage.getItem("posts"));
-      const postIndex = retrievedPosts.findIndex(el => el.id === post.id);
+      let retrievedPosts = getPosts();
+      const postIndex = findIndexById(retrievedPosts, post.id);
       retrievedPosts[postIndex] = post;
       localStorage.setItem("posts", JSON.stringify(retrievedPosts));
       vuexContext.commit("setPosts", retrievedPosts);
     },
     deletePost(vuexContext, postId) {
-      let retrievedPosts = JSON.parse(localStorage.getItem("posts"));
-      const postIndex = retrievedPosts.findIndex(el => el.id === postId);
-      console.log(postIndex);
-      retrievedPosts = retrievedPosts
-        .slice(0, postIndex)
-        .concat(retrievedPosts.slice(postIndex + 1, retrievedPosts.length));
+      let retrievedPosts = getPosts();
+      const postIndex = findIndexById(retrievedPosts, postId);
+      retrievedPosts = delRowFromArr(retrievedPosts, postIndex);
       localStorage.setItem("posts", JSON.stringify(retrievedPosts));
       vuexContext.commit("setPosts", retrievedPosts);
     },
     addCommentToPost(vuexContext, payload) {
-      let retrievedPosts = JSON.parse(localStorage.getItem("posts"));
-      const postIndex = retrievedPosts.findIndex(
-        el => el.id === payload.postId
-      );
+      let retrievedPosts = getPosts();
+      const postIndex = findIndexById(retrievedPosts, payload.postId);
       if (!retrievedPosts[postIndex].comments)
         retrievedPosts[postIndex].comments = [];
       retrievedPosts[postIndex].comments.push(payload.comment);
       vuexContext.dispatch("updatePost", retrievedPosts[postIndex]);
     },
     editComment(vuexContext, payload) {
-      let retrievedPosts = JSON.parse(localStorage.getItem("posts"));
-      const postIndex = retrievedPosts.findIndex(
-        el => el.id === payload.postId
-      );
-      const commentIndex = retrievedPosts[postIndex].comments.findIndex(
-        el => el.id === payload.comment.id
+      let retrievedPosts = getPosts();
+      const postIndex = findIndexById(retrievedPosts, payload.postId);
+      const commentIndex = findIndexById(
+        retrievedPosts[postIndex].comments,
+        payload.comment.id
       );
       retrievedPosts[postIndex].comments[commentIndex] = payload.comment;
-      console.log(retrievedPosts[postIndex].comments[commentIndex]);
       vuexContext.dispatch("updatePost", retrievedPosts[postIndex]);
     },
 
     delCommentfromPost(vuexContext, payload) {
-      let retrievedPosts = JSON.parse(localStorage.getItem("posts"));
-      const postIndex = retrievedPosts.findIndex(
-        el => el.id === payload.postId
+      let retrievedPosts = getPosts();
+      const postIndex = findIndexById(retrievedPosts, payload.postId);
+      const commentIndex = findIndexById(
+        retrievedPosts[postIndex].comments,
+        payload.commentId
       );
-      const commentIndex = retrievedPosts[postIndex].comments.findIndex(
-        el => el.id === payload.commentId
+      retrievedPosts[postIndex].comments = delRowFromArr(
+        retrievedPosts[postIndex].comments,
+        commentIndex
       );
-      retrievedPosts[postIndex].comments = retrievedPosts[postIndex].comments
-        .slice(0, commentIndex)
-        .concat(
-          retrievedPosts[postIndex].comments.slice(
-            commentIndex + 1,
-            retrievedPosts[postIndex].comments.length
-          )
-        );
       vuexContext.dispatch("updatePost", retrievedPosts[postIndex]);
     }
   },
   getters: {
     loadedPosts(state) {
-      return state.posts;
-    },
-    loadedPost(state, id) {
       return state.posts;
     }
   }
