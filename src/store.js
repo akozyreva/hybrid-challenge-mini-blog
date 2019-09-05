@@ -78,6 +78,11 @@ export default new Vuex.Store({
         commentIndex
       );
       vuexContext.dispatch("updatePost", retrievedPosts[postIndex]);
+    },
+    clearStore(vuexContext) {
+      localStorage.removeItem("posts");
+      const posts = [];
+      vuexContext.commit("setPosts", posts);
     }
   },
   getters: {

@@ -26,14 +26,14 @@ import HelloWorld from "./components/HelloWorld";
 
 export default {
   name: "App",
-  components: {
-    HelloWorld
-  },
   data: () => ({
     //
   }),
   created() {
     this.$store.dispatch("initStore");
+  },
+  beforeDestroy() {
+    this.$store.dispatch("clearStore");
   }
 };
 </script>
